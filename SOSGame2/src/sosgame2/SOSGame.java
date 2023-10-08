@@ -4,8 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class SOSGame2 {
-	private static GameBoard gameBoard;
+public class SOSGame {
+	private static Board gameBoard;
 	public static void main(String[] args) {
 		
 		
@@ -21,7 +21,7 @@ public class SOSGame2 {
 	            int boardSize = promptForBoardSize();
 	            
 	            // This line instantiates the gameBoard for the first time
-	            gameBoard = new GameBoard(boardSize); 
+	            gameBoard = new Board(boardSize); 
 	            frame.add(gameBoard, BorderLayout.CENTER);
 
 	            frame.add(initializeControlPanel(), BorderLayout.NORTH);
@@ -54,8 +54,8 @@ public class SOSGame2 {
         colorGroup.add(redButton);
         colorGroup.add(blueButton);
         redButton.setSelected(true);
-        redButton.addActionListener(e -> GameBoard.setCurrentColor(Color.RED));
-        blueButton.addActionListener(e -> GameBoard.setCurrentColor(Color.BLUE));
+        redButton.addActionListener(e -> Board.setCurrentColor(Color.RED));
+        blueButton.addActionListener(e -> Board.setCurrentColor(Color.BLUE));
         colorPanel.add(redButton);
         colorPanel.add(blueButton);
         
@@ -67,8 +67,8 @@ public class SOSGame2 {
         letterGroup.add(sButton);
         letterGroup.add(oButton);
         sButton.setSelected(true);  // By default, "S" will be selected
-        sButton.addActionListener(e -> GameBoard.setCurrentLetter("S"));
-        oButton.addActionListener(e -> GameBoard.setCurrentLetter("O"));
+        sButton.addActionListener(e -> Board.setCurrentLetter("S"));
+        oButton.addActionListener(e -> Board.setCurrentLetter("O"));
         letterPanel.add(sButton);
         letterPanel.add(oButton);
 
@@ -79,14 +79,14 @@ public class SOSGame2 {
 	//
 	static void initializeMenu(JFrame frame) {
         JMenuBar menuBar = new JMenuBar();
-        JMenu gameMenu = new JMenu("Game");
+        JMenu gameMenu = new JMenu("Menu");
         JMenuItem newGame = new JMenuItem("New Game");
         newGame.addActionListener(e -> {
             int boardSize = promptForBoardSize();
             
 
             // Create a new game board with the selected size
-            GameBoard newGameBoard = new GameBoard(boardSize);
+            Board newGameBoard = new Board(boardSize);
 
             // Remove the old game board from the frame
             frame.getContentPane().remove(gameBoard);
@@ -105,8 +105,7 @@ public class SOSGame2 {
         menuBar.add(gameMenu);
         frame.setJMenuBar(menuBar);
     }
-	
-	
+
 	 public static int promptForBoardSize() {
          String result = JOptionPane.showInputDialog(null, "Enter board size (e.g., 8 for 8x8):", "New Game", JOptionPane.PLAIN_MESSAGE);
          int boardSize = 8; // default size
