@@ -36,13 +36,6 @@ public class SOSGame {
 	            frame.setLocationRelativeTo(null);
 	        }
             
-            
-            
-           
-            
-            
-            
-
         });
     }
 	
@@ -120,6 +113,6 @@ public class SOSGame {
          return boardSize;
      }
      
-	//
+	// Extra code if needed
 	
 }
