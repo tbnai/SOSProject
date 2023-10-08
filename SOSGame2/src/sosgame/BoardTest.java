@@ -4,14 +4,14 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import sosgame.Board;
-import sosgame.Button; // Assuming Button is your button class
+import sosgame.Button; 
 
 public class BoardTest {
     private Board gameBoard;
 
     @Before
     public void setUp() {
-        gameBoard = new Board(8); // Change the board size as needed
+        gameBoard = new Board(8); 
     }
 
     @Test
@@ -32,5 +32,5 @@ public class BoardTest {
         assertTrue(gameBoard.isBoardFull());
     }
 
-    // Add more test methods as needed
+    
 }
