@@ -1,6 +1,9 @@
-package sosgame2;
+package sosgame;
 
 import javax.swing.*;
+
+import sosgame.SOSGame;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,20 +11,23 @@ import java.awt.event.ActionListener;
 
 
 public class Board extends JPanel {
-	private final int BOARD_SIZE;
-	private Button[][] buttons;
+	private static int BOARD_SIZE = 0;
+	private static Button[][] buttons;
 	private char[][] boardValues;
 	private static Color currentColor = Color.RED;
 	private int redScore = 0;
 	private int blueScore = 0;
 	private static boolean isSTurn = true;  // Start with "S" turn
 	private static String currentLetter = "S"; // Default letter
+	
+	
 
 	public Board(int boardSize) {
 	    this.BOARD_SIZE = boardSize;
 	    boardValues = new char[BOARD_SIZE][BOARD_SIZE];
 	    setLayout(new GridLayout(BOARD_SIZE, BOARD_SIZE));
-	    buttons = new Button[BOARD_SIZE][BOARD_SIZE];
+	 // Initialize the buttons array
+        buttons = new Button[BOARD_SIZE][BOARD_SIZE];
 	    initializeButtons();
 	}
 	
@@ -57,7 +63,7 @@ public class Board extends JPanel {
 	}
 
 	
-	public boolean isBoardFull() {
+	public static boolean isBoardFull() {
 	    for (int i = 0; i < BOARD_SIZE; i++) {
 	        for (int j = 0; j < BOARD_SIZE; j++) {
 	            if ("".equals(buttons[i][j].getText())) {
@@ -159,6 +165,12 @@ public class Board extends JPanel {
 	    }
 	    return "";
 	}
+
+    public Button[][] getButtons() {
+        return buttons;
+    }
+
+
 
 
 }

@@ -1,6 +1,9 @@
-package sosgame2;
+package sosgame;
 
 import javax.swing.*;
+
+import sosgame.Board;
+
 import java.awt.*;
 
 
@@ -77,7 +80,7 @@ public class SOSGame {
         return panel;
     }
 	//
-	static void initializeMenu(JFrame frame) {
+	public static void initializeMenu(JFrame frame) {
         JMenuBar menuBar = new JMenuBar();
         JMenu gameMenu = new JMenu("Menu");
         JMenuItem newGame = new JMenuItem("New Game");

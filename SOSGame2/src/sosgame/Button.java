@@ -1,4 +1,4 @@
-package sosgame2;
+package sosgame;
 
 import javax.swing.JButton;
 import java.awt.Color;
