@@ -135,11 +135,6 @@ public class Board extends JPanel {
 	        getStringValue(row, col) + getStringValue(row-1, col+1) + getStringValue(row-2, col+2) // D-T-R
 	    };
 	    
-	    System.out.println("H   : "+potentialMatches[0]);
-	    System.out.println("V   : "+potentialMatches[1]);
-	    System.out.println("DL  : "+potentialMatches[2]);
-	    System.out.println("DR  : "+potentialMatches[3]);
-
 	    for (String sequence : potentialMatches) 
 	    {
 	        if ("SOS".equals(sequence)) 
@@ -153,12 +148,12 @@ public class Board extends JPanel {
 	            }
 	            // Print score
 	            System.out.println("Red Score: " + redScore + ", Blue Score: " + blueScore);
-	            //return; // Exit after first match (a single placement can at most create one SOS)
+	            //  Exit after first match
 	        }
 	    }
 	}
 
-	//get the value of a board cell, returns empty if out of bounds
+	//get the value of a board cell
 	private String getStringValue(int i, int j) {
 	    if (i >= 0 && i < BOARD_SIZE && j >= 0 && j < BOARD_SIZE) {
 	        return buttons[i][j].getText();

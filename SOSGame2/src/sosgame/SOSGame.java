@@ -82,7 +82,7 @@ public class SOSGame {
 	//
 	public static void initializeMenu(JFrame frame) {
         JMenuBar menuBar = new JMenuBar();
-        JMenu gameMenu = new JMenu("Menu");
+        JMenu gameMenu = new JMenu("Option");
         JMenuItem newGame = new JMenuItem("New Game");
         newGame.addActionListener(e -> {
             int boardSize = promptForBoardSize();
