@@ -165,6 +165,11 @@ public class Board extends JPanel {
         return buttons;
     }
 
+	public Object isSimpleMode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 
