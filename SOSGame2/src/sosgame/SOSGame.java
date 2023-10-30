@@ -28,10 +28,12 @@ public class SOSGame {
                 );
 
                 int boardSize = promptForBoardSize();
-                boolean isSimpleMode = (modeChoice == 0);
 
-                // This line instantiates the gameBoard for the first time
-                gameBoard = new Board(boardSize);
+                if (modeChoice == 0) {
+                    gameBoard = new BoardSimple(boardSize); // Simple Mode
+                } else {
+                    gameBoard = new BoardGeneral(boardSize); // General Mode
+                }
                 frame.add(gameBoard, BorderLayout.CENTER);
 
                 frame.add(initializeControlPanel(), BorderLayout.NORTH);
@@ -54,7 +56,6 @@ public class SOSGame {
         }
         return boardSize;
     }
-
     public static JPanel initializeControlPanel() {
         JPanel panel = new JPanel(new GridLayout(2, 1));
 
@@ -95,16 +96,15 @@ public class SOSGame {
         JMenuItem newGame = new JMenuItem("New Game");
         newGame.addActionListener(e -> {
             int boardSize = promptForBoardSize();
+            boolean isSimpleMode = (gameBoard instanceof BoardSimple); // Check if the current board is an instance of BoardSimple
 
-            // Create a new game board with the selected size
-            Board newGameBoard = new Board(boardSize);
+            // Create a new game board with the selected size and the same game mode
+            Board newGameBoard = isSimpleMode ? new BoardSimple(boardSize) : new BoardGeneral(boardSize);
 
-            // Remove the old game board from the frame
             frame.getContentPane().remove(gameBoard);
-            gameBoard = newGameBoard; // Update the reference to the current game board
+            gameBoard = newGameBoard;
             frame.add(gameBoard, BorderLayout.CENTER);
 
-            // Refresh the frame contents
             frame.revalidate();
             frame.repaint();
 
@@ -116,6 +116,4 @@ public class SOSGame {
         menuBar.add(gameMenu);
         frame.setJMenuBar(menuBar);
     }
-
-    // Extra code if needed
 }
