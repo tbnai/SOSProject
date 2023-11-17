@@ -23,6 +23,8 @@ public class Board extends JPanel {
         buttons = new Button[BOARD_SIZE][BOARD_SIZE];
         initializeButtons();
     }
+    
+    
 
     public static void setCurrentColor(Color color) {
         currentColor = color;

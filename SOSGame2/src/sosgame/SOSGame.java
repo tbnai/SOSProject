@@ -67,28 +67,58 @@ public class SOSGame {
         colorGroup.add(redButton);
         colorGroup.add(blueButton);
         redButton.setSelected(true);
-        redButton.addActionListener(e -> Board.setCurrentColor(Color.RED));
-        blueButton.addActionListener(e -> Board.setCurrentColor(Color.BLUE));
+        redButton.addActionListener(e -> setCurrentColor(Color.RED));
+        blueButton.addActionListener(e -> setCurrentColor(Color.BLUE));
         colorPanel.add(redButton);
         colorPanel.add(blueButton);
 
-        // For letter choice
-        JPanel letterPanel = new JPanel();
-        JRadioButton sButton = new JRadioButton("S");
-        JRadioButton oButton = new JRadioButton("O");
-        ButtonGroup letterGroup = new ButtonGroup();
-        letterGroup.add(sButton);
-        letterGroup.add(oButton);
-        sButton.setSelected(true); // By default, "S" will be selected
-        sButton.addActionListener(e -> Board.setCurrentLetter("S"));
-        oButton.addActionListener(e -> Board.setCurrentLetter("O"));
-        letterPanel.add(sButton);
-        letterPanel.add(oButton);
+        // For team choice
+        JPanel teamPanel = new JPanel();
+        JRadioButton humanRedButton = new JRadioButton("Human");
+        JRadioButton computerRedButton = new JRadioButton("Computer");
+        JRadioButton humanBlueButton = new JRadioButton("Human");
+        JRadioButton computerBlueButton = new JRadioButton("Computer");
+        ButtonGroup teamRedGroup = new ButtonGroup();
+        ButtonGroup teamBlueGroup = new ButtonGroup();
+        teamRedGroup.add(humanRedButton);
+        teamRedGroup.add(computerRedButton);
+        teamBlueGroup.add(humanBlueButton);
+        teamBlueGroup.add(computerBlueButton);
+        humanRedButton.setSelected(true);
+        humanBlueButton.setSelected(true);
+        humanRedButton.addActionListener(e -> setRedTeamType("Human"));
+        computerRedButton.addActionListener(e -> setRedTeamType("Computer"));
+        humanBlueButton.addActionListener(e -> setBlueTeamType("Human"));
+        computerBlueButton.addActionListener(e -> setBlueTeamType("Computer"));
+        teamPanel.add(new JLabel("Red Team:"));
+        teamPanel.add(humanRedButton);
+        teamPanel.add(computerRedButton);
+        teamPanel.add(new JLabel("Blue Team:"));
+        teamPanel.add(humanBlueButton);
+        teamPanel.add(computerBlueButton);
 
         panel.add(colorPanel);
-        panel.add(letterPanel);
+        panel.add(teamPanel);
         return panel;
     }
+
+    private static Object setCurrentColor(Color red) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// Add these two methods to SOSGame class
+    private static String redTeamType = "Human";
+    private static String blueTeamType = "Human";
+
+    public static void setRedTeamType(String teamType) {
+        redTeamType = teamType;
+    }
+
+    public static void setBlueTeamType(String teamType) {
+        blueTeamType = teamType;
+    }
+
 
     public static void initializeMenu(JFrame frame) {
         JMenuBar menuBar = new JMenuBar();
