@@ -57,7 +57,7 @@ public class SOSGame {
         return boardSize;
     }
     public static JPanel initializeControlPanel() {
-        JPanel panel = new JPanel(new GridLayout(3, 1));
+        JPanel panel = new JPanel(new GridLayout(2, 1));
 
         // For color choice
         JPanel colorPanel = new JPanel();
@@ -71,30 +71,6 @@ public class SOSGame {
         blueButton.addActionListener(e -> Board.setCurrentColor(Color.BLUE));
         colorPanel.add(redButton);
         colorPanel.add(blueButton);
-
-        // For team choice
-        JPanel teamPanel = new JPanel();
-        JRadioButton redHumanButton = new JRadioButton("Red - Human");
-        JRadioButton redComputerButton = new JRadioButton("Red - Computer");
-        JRadioButton blueHumanButton = new JRadioButton("Blue - Human");
-        JRadioButton blueComputerButton = new JRadioButton("Blue - Computer");
-        ButtonGroup redTeamGroup = new ButtonGroup();
-        ButtonGroup blueTeamGroup = new ButtonGroup();
-        redTeamGroup.add(redHumanButton);
-        redTeamGroup.add(redComputerButton);
-        blueTeamGroup.add(blueHumanButton);
-        blueTeamGroup.add(blueComputerButton);
-
-        redHumanButton.setSelected(true); // By default, "Red - Human" will be selected
-        redHumanButton.addActionListener(e -> setRedTeamType("Human"));
-        redComputerButton.addActionListener(e -> setRedTeamType("Computer"));
-        blueHumanButton.addActionListener(e -> setBlueTeamType("Human"));
-        blueComputerButton.addActionListener(e -> setBlueTeamType("Computer"));
-
-        teamPanel.add(redHumanButton);
-        teamPanel.add(redComputerButton);
-        teamPanel.add(blueHumanButton);
-        teamPanel.add(blueComputerButton);
 
         // For letter choice
         JPanel letterPanel = new JPanel();
@@ -110,31 +86,9 @@ public class SOSGame {
         letterPanel.add(oButton);
 
         panel.add(colorPanel);
-        panel.add(teamPanel);
         panel.add(letterPanel);
-
         return panel;
     }
-
-
-
-    private static Object setCurrentColor(Color red) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	// Add these two methods to SOSGame class
-    private static String redTeamType = "Human";
-    private static String blueTeamType = "Human";
-
-    public static void setRedTeamType(String teamType) {
-        redTeamType = teamType;
-    }
-
-    public static void setBlueTeamType(String teamType) {
-        blueTeamType = teamType;
-    }
-
 
     public static void initializeMenu(JFrame frame) {
         JMenuBar menuBar = new JMenuBar();
