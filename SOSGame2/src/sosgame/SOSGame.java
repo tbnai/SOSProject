@@ -29,6 +29,31 @@ public class SOSGame {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLayout(new BorderLayout());
 
+            // Add a variable to track the side chosen by the first player
+            Color chosenSide = null;
+
+            if ("Player vs CPU".equals(selectedOpponentType)) {
+                // Ask the first player to choose a side
+                String[] sideOptions = {"Red", "Blue"};
+                String chosenSideString = (String) JOptionPane.showInputDialog(
+                        null,
+                        "Player 1, choose your side:",
+                        "Side Selection",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        sideOptions,
+                        sideOptions[0]
+                );
+
+                if (chosenSideString == null) {
+                    // User closed the dialog or canceled, exit the program
+                    System.exit(0);
+                }
+
+                // Assign the chosen side to the first player
+                chosenSide = "Red".equals(chosenSideString) ? Color.RED : Color.BLUE;
+            }
+
             // Ask the user to choose the game mode
             String[] gameModes = {"Simple Mode", "General Mode"};
             int modeChoice = JOptionPane.showOptionDialog(
@@ -53,6 +78,11 @@ public class SOSGame {
 
             frame.add(initializeControlPanel(), BorderLayout.NORTH);
             initializeMenu(frame);
+
+            // If "Player vs CPU" is selected, set the chosen side for the first player
+            if ("Player vs CPU".equals(selectedOpponentType)) {
+                Board.setCurrentColor(chosenSide);
+            }
 
             frame.pack();
             frame.setVisible(true);
