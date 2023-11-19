@@ -23,6 +23,19 @@ public class Board extends JPanel {
         buttons = new Button[BOARD_SIZE][BOARD_SIZE];
         initializeButtons();
     }
+    
+    private Color currentPlayerColor = Color.RED;
+    
+    public void makeMove(int i, int j, String string, String string2) {
+        // TODO: Implement the logic for making a move
+
+        // Toggle between "Red" and "Blue" for each move
+        currentPlayerColor = (currentPlayerColor == Color.RED) ? Color.BLUE : Color.RED;
+    }
+
+    public Color getCurrentPlayerColor() {
+        return currentPlayerColor;
+    }
 
     public static void setCurrentColor(Color color) {
         currentColor = color;
@@ -47,7 +60,7 @@ public class Board extends JPanel {
         if (choice == JOptionPane.YES_OPTION) {
             int boardSize = SOSGame.promptForBoardSize();
             frame.getContentPane().removeAll();
-            frame.add(new BoardGeneral(boardSize), BorderLayout.CENTER);
+            frame.add(new BoardGeneral(boardSize, message), BorderLayout.CENTER);
             frame.add(SOSGame.initializeControlPanel(), BorderLayout.NORTH);
             SOSGame.initializeMenu(frame);
             frame.pack();

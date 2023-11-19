@@ -1,7 +1,7 @@
 package sosgame;
 
 public class BoardSimple extends Board {
-    public BoardSimple(int boardSize) {
+    public BoardSimple(int boardSize, String selectedOpponentType) {
         super(boardSize);
     }
 

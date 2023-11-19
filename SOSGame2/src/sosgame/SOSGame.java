@@ -7,42 +7,56 @@ public class SOSGame {
     private static Board gameBoard;
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JFrame frame = new JFrame("SOS Game");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setLayout(new BorderLayout());
+        SwingUtilities.invokeLater(() -> {
+            // Ask the user to choose the opponent type
+            String[] opponentTypes = {"Player vs Player", "Player vs CPU", "CPU vs CPU"};
+            String selectedOpponentType = (String) JOptionPane.showInputDialog(
+                    null,
+                    "Select your opponent:",
+                    "Opponent Selection",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    opponentTypes,
+                    opponentTypes[0]
+            );
 
-                // Ask the user to choose the game mode
-                String[] gameModes = {"Simple Mode", "General Mode"};
-                int modeChoice = JOptionPane.showOptionDialog(
-                        frame,
-                        "Select a game mode:",
-                        "Game Mode Selection",
-                        JOptionPane.DEFAULT_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        gameModes,
-                        gameModes[0]
-                );
-
-                int boardSize = promptForBoardSize();
-
-                if (modeChoice == 0) {
-                    gameBoard = new BoardSimple(boardSize); // Simple Mode
-                } else {
-                    gameBoard = new BoardGeneral(boardSize); // General Mode
-                }
-                frame.add(gameBoard, BorderLayout.CENTER);
-
-                frame.add(initializeControlPanel(), BorderLayout.NORTH);
-                initializeMenu(frame);
-
-                frame.pack();
-                frame.setVisible(true);
-                frame.setLocationRelativeTo(null);
+            if (selectedOpponentType == null) {
+                // User closed the dialog or canceled, exit the program
+                System.exit(0);
             }
+
+            JFrame frame = new JFrame("SOS Game");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setLayout(new BorderLayout());
+
+            // Ask the user to choose the game mode
+            String[] gameModes = {"Simple Mode", "General Mode"};
+            int modeChoice = JOptionPane.showOptionDialog(
+                    frame,
+                    "Select a game mode:",
+                    "Game Mode Selection",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    gameModes,
+                    gameModes[0]
+            );
+
+            int boardSize = promptForBoardSize();
+
+            if (modeChoice == 0) {
+                gameBoard = new BoardSimple(boardSize, selectedOpponentType); // Simple Mode
+            } else {
+                gameBoard = new BoardGeneral(boardSize, selectedOpponentType); // General Mode
+            }
+            frame.add(gameBoard, BorderLayout.CENTER);
+
+            frame.add(initializeControlPanel(), BorderLayout.NORTH);
+            initializeMenu(frame);
+
+            frame.pack();
+            frame.setVisible(true);
+            frame.setLocationRelativeTo(null);
         });
     }
 
@@ -99,7 +113,7 @@ public class SOSGame {
             boolean isSimpleMode = (gameBoard instanceof BoardSimple); // Check if the current board is an instance of BoardSimple
 
             // Create a new game board with the selected size and the same game mode
-            Board newGameBoard = isSimpleMode ? new BoardSimple(boardSize) : new BoardGeneral(boardSize);
+            Board newGameBoard = isSimpleMode ? new BoardSimple(boardSize, null) : new BoardGeneral(boardSize, null);
 
             frame.getContentPane().remove(gameBoard);
             gameBoard = newGameBoard;
