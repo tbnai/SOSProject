@@ -16,6 +16,8 @@ public class Board extends JPanel {
     private static boolean isSTurn = true;  // Start with "S" turn
     private static String currentLetter = "S"; // Default letter
 
+    private ComputerPlayer computerPlayer;
+
     public Board(int boardSize) {
         this.BOARD_SIZE = boardSize;
         boardValues = new char[BOARD_SIZE][BOARD_SIZE];
@@ -23,9 +25,14 @@ public class Board extends JPanel {
         buttons = new Button[BOARD_SIZE][BOARD_SIZE];
         initializeButtons();
     }
-    
+
+    public Board(int boardSize, ComputerPlayer computerPlayer) {
+        this(boardSize);
+        this.computerPlayer = computerPlayer;
+    }
+
     private Color currentPlayerColor = Color.RED;
-    
+
     public void makeMove(int i, int j, String string, String string2) {
         // TODO: Implement the logic for making a move
 
@@ -117,24 +124,24 @@ public class Board extends JPanel {
     void checkForSOS(int row, int col) {
         // Potential sequences
         String[] potentialMatches = {
-            getStringValue(row, col - 1) + getStringValue(row, col) + getStringValue(row, col + 1), // Horizontal
-            getStringValue(row - 1, col) + getStringValue(row, col) + getStringValue(row + 1, col), // Vertical
-            getStringValue(row - 1, col - 1) + getStringValue(row, col) + getStringValue(row + 1, col + 1), // Diagonal top-left to bottom-right
-            getStringValue(row - 1, col + 1) + getStringValue(row, col) + getStringValue(row + 1, col - 1), // Diagonal top-right to bottom-left
+                getStringValue(row, col - 1) + getStringValue(row, col) + getStringValue(row, col + 1), // Horizontal
+                getStringValue(row - 1, col) + getStringValue(row, col) + getStringValue(row + 1, col), // Vertical
+                getStringValue(row - 1, col - 1) + getStringValue(row, col) + getStringValue(row + 1, col + 1), // Diagonal top-left to bottom-right
+                getStringValue(row - 1, col + 1) + getStringValue(row, col) + getStringValue(row + 1, col - 1), // Diagonal top-right to bottom-left
 
-            getStringValue(row, col - 2) + getStringValue(row, col-1) + getStringValue(row, col), // Horizontal-left
-            getStringValue(row , col) + getStringValue(row, col+1) + getStringValue(row, col+2), // Horizontal-right
+                getStringValue(row, col - 2) + getStringValue(row, col-1) + getStringValue(row, col), // Horizontal-left
+                getStringValue(row , col) + getStringValue(row, col+1) + getStringValue(row, col+2), // Horizontal-right
 
-            getStringValue(row-2, col) + getStringValue(row-1, col) + getStringValue(row, col), // Vertical-top
-            getStringValue(row, col) + getStringValue(row+1, col) + getStringValue(row + 2, col), // Vertical-bottom
+                getStringValue(row-2, col) + getStringValue(row-1, col) + getStringValue(row, col), // Vertical-top
+                getStringValue(row, col) + getStringValue(row+1, col) + getStringValue(row + 2, col), // Vertical-bottom
 
-            getStringValue(row-2, col - 2) + getStringValue(row-1, col-1) + getStringValue(row, col), // D-T-L
-            getStringValue(row , col) + getStringValue(row+1, col+1) + getStringValue(row + 2, col+2), // D-B-R
+                getStringValue(row-2, col - 2) + getStringValue(row-1, col-1) + getStringValue(row, col), // D-T-L
+                getStringValue(row , col) + getStringValue(row+1, col+1) + getStringValue(row + 2, col+2), // D-B-R
 
-            getStringValue(row+2, col-2) + getStringValue(row+1, col-1) + getStringValue(row, col), // D-B-L
-            getStringValue(row, col) + getStringValue(row-1, col+1) + getStringValue(row-2, col+2) // D-T-R
+                getStringValue(row+2, col-2) + getStringValue(row+1, col-1) + getStringValue(row, col), // D-B-L
+                getStringValue(row, col) + getStringValue(row-1, col+1) + getStringValue(row-2, col+2) // D-T-R
         };
-        
+
         for (String sequence : potentialMatches) {
             if ("SOS".equals(sequence)) {
                 if (getCurrentColor() == Color.RED) {
@@ -160,8 +167,10 @@ public class Board extends JPanel {
     public Button[][] getButtons() {
         return buttons;
     }
-    
+
+    public void makeComputerMove() {
+        // TODO: Implement the computer's move logic
+    }
+
     // Other methods and code common to both modes
 }
-
-      

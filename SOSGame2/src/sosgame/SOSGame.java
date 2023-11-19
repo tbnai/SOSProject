@@ -1,3 +1,4 @@
+// SOSGame.java
 package sosgame;
 
 import javax.swing.*;
@@ -74,6 +75,7 @@ public class SOSGame {
             } else {
                 gameBoard = new BoardGeneral(boardSize, selectedOpponentType); // General Mode
             }
+
             frame.add(gameBoard, BorderLayout.CENTER);
 
             frame.add(initializeControlPanel(), BorderLayout.NORTH);
@@ -87,10 +89,43 @@ public class SOSGame {
             frame.pack();
             frame.setVisible(true);
             frame.setLocationRelativeTo(null);
+
+            // Play the game if it's CPU vs CPU
+            if ("CPU vs CPU".equals(selectedOpponentType)) {
+                playCPUGame();
+            }
         });
     }
 
-    public static int promptForBoardSize() {
+    public static void playCPUGame() {
+        ComputerPlayer player1 = new ComputerPlayer(Color.RED, gameBoard);
+        ComputerPlayer player2 = new ComputerPlayer(Color.BLUE, gameBoard);
+
+        Thread cpuVsCpuThread = new Thread(() -> {
+            while (!Board.isBoardFull()) {
+                player1.makeMove();
+                gameBoard.repaint(); // Update the display
+
+                if (Board.isBoardFull()) {
+                    break;
+                }
+
+                // Wait for a short time to visualize the moves
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                player2.makeMove();
+                gameBoard.repaint(); // Update the display
+            }
+        });
+
+        cpuVsCpuThread.start();
+    }
+
+    static int promptForBoardSize() {
         String result = JOptionPane.showInputDialog(null, "Enter board size (e.g., 8 for 8x8):", "New Game", JOptionPane.PLAIN_MESSAGE);
         int boardSize = 8; // default size
         try {
@@ -100,7 +135,8 @@ public class SOSGame {
         }
         return boardSize;
     }
-    public static JPanel initializeControlPanel() {
+
+    static JPanel initializeControlPanel() {
         JPanel panel = new JPanel(new GridLayout(2, 1));
 
         // For color choice
@@ -134,7 +170,7 @@ public class SOSGame {
         return panel;
     }
 
-    public static void initializeMenu(JFrame frame) {
+    static void initializeMenu(JFrame frame) {
         JMenuBar menuBar = new JMenuBar();
         JMenu gameMenu = new JMenu("Option");
         JMenuItem newGame = new JMenuItem("New Game");
