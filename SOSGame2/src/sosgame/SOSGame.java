@@ -3,127 +3,132 @@ package sosgame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SOSGame {
     private static Board gameBoard;
+    private static String selectedOpponentType;
+    
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            // Ask the user to choose the opponent type
-            String[] opponentTypes = {"Player vs Player", "Player vs CPU", "CPU vs CPU"};
-            String selectedOpponentType = (String) JOptionPane.showInputDialog(
-                    null,
-                    "Select your opponent:",
-                    "Opponent Selection",
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    opponentTypes,
-                    opponentTypes[0]
-            );
-
-            if (selectedOpponentType == null) {
-                // User closed the dialog or canceled, exit the program
-                System.exit(0);
-            }
-
-            JFrame frame = new JFrame("SOS Game");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setLayout(new BorderLayout());
-
-            // Add a variable to track the side chosen by the first player
-            Color chosenSide = null;
-
-            if ("Player vs CPU".equals(selectedOpponentType)) {
-                // Ask the first player to choose a side
-                String[] sideOptions = {"Red", "Blue"};
-                String chosenSideString = (String) JOptionPane.showInputDialog(
+            SwingUtilities.invokeLater(() -> {
+                // Ask the user to choose the opponent type
+                String[] opponentTypes = {"Player vs Player", "Player vs CPU", "CPU vs CPU"};
+                selectedOpponentType = (String) JOptionPane.showInputDialog(
                         null,
-                        "Player 1, choose your side:",
-                        "Side Selection",
+                        "Select your opponent:",
+                        "Opponent Selection",
                         JOptionPane.QUESTION_MESSAGE,
                         null,
-                        sideOptions,
-                        sideOptions[0]
+                        opponentTypes,
+                        opponentTypes[0]
                 );
 
-                if (chosenSideString == null) {
+                if (selectedOpponentType == null) {
                     // User closed the dialog or canceled, exit the program
                     System.exit(0);
                 }
 
-                // Assign the chosen side to the first player
-                chosenSide = "Red".equals(chosenSideString) ? Color.RED : Color.BLUE;
-            }
+                JFrame frame = new JFrame("SOS Game");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setLayout(new BorderLayout());
 
-            // Ask the user to choose the game mode
-            String[] gameModes = {"Simple Mode", "General Mode"};
-            int modeChoice = JOptionPane.showOptionDialog(
-                    frame,
-                    "Select a game mode:",
-                    "Game Mode Selection",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    gameModes,
-                    gameModes[0]
-            );
+                // Add a variable to track the side chosen by the first player
+                Color chosenSide = null;
 
-            int boardSize = promptForBoardSize();
+                if ("Player vs CPU".equals(selectedOpponentType)) {
+                    // Ask the first player to choose a side
+                    String[] sideOptions = {"Red", "Blue"};
+                    String chosenSideString = (String) JOptionPane.showInputDialog(
+                            null,
+                            "Player 1, choose your side:",
+                            "Side Selection",
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            sideOptions,
+                            sideOptions[0]
+                    );
 
-            if (modeChoice == 0) {
-                gameBoard = new BoardSimple(boardSize, selectedOpponentType); // Simple Mode
-            } else {
-                gameBoard = new BoardGeneral(boardSize, selectedOpponentType); // General Mode
-            }
+                    if (chosenSideString == null) {
+                        // User closed the dialog or canceled, exit the program
+                        System.exit(0);
+                    }
 
-            frame.add(gameBoard, BorderLayout.CENTER);
+                    // Assign the chosen side to the first player
+                    chosenSide = "Red".equals(chosenSideString) ? Color.RED : Color.BLUE;
+                }
 
-            frame.add(initializeControlPanel(), BorderLayout.NORTH);
-            initializeMenu(frame);
+                // Ask the user to choose the game mode
+                String[] gameModes = {"Simple Mode", "General Mode"};
+                int modeChoice = JOptionPane.showOptionDialog(
+                        frame,
+                        "Select a game mode:",
+                        "Game Mode Selection",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        gameModes,
+                        gameModes[0]
+                );
 
-            // If "Player vs CPU" is selected, set the chosen side for the first player
-            if ("Player vs CPU".equals(selectedOpponentType)) {
-                Board.setCurrentColor(chosenSide);
-            }
+                int boardSize = promptForBoardSize();
 
-            frame.pack();
-            frame.setVisible(true);
-            frame.setLocationRelativeTo(null);
+                if (modeChoice == 0) {
+                    gameBoard = new BoardSimple(boardSize, selectedOpponentType); // Simple Mode
+                } else {
+                    gameBoard = new BoardGeneral(boardSize, selectedOpponentType); // General Mode
+                }
 
-            // Play the game if it's CPU vs CPU
-            if ("CPU vs CPU".equals(selectedOpponentType)) {
-                playCPUGame();
-            }
-        });
-    }
+                frame.add(gameBoard, BorderLayout.CENTER);
+
+                frame.add(initializeControlPanel(), BorderLayout.NORTH);
+                initializeMenu(frame);
+
+                // If "Player vs CPU" is selected, set the chosen side for the first player
+                if ("Player vs CPU".equals(selectedOpponentType)) {
+                    Board.setCurrentColor(chosenSide);
+                }
+
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
+
+                // Play the game if it's CPU vs CPU
+                if ("CPU vs CPU".equals(selectedOpponentType)) {
+                    playCPUGame();
+                }
+            });
+        }
 
     public static void playCPUGame() {
         ComputerPlayer player1 = new ComputerPlayer(Color.RED, gameBoard);
         ComputerPlayer player2 = new ComputerPlayer(Color.BLUE, gameBoard);
 
-        Thread cpuVsCpuThread = new Thread(() -> {
-            while (!Board.isBoardFull()) {
-                player1.makeMove();
+        Timer cpuVsCpuTimer = new Timer(1000, new ActionListener() {
+            private boolean isPlayer1Turn = true;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (isPlayer1Turn) {
+                    player1.makeMove();
+                } else {
+                    player2.makeMove();
+                }
+
                 gameBoard.repaint(); // Update the display
 
                 if (Board.isBoardFull()) {
-                    break;
+                    ((Timer) e.getSource()).stop(); // Stop the timer if the board is full
                 }
 
-                // Wait for a short time to visualize the moves
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                player2.makeMove();
-                gameBoard.repaint(); // Update the display
+                isPlayer1Turn = !isPlayer1Turn; // Toggle turns
             }
         });
 
-        cpuVsCpuThread.start();
+        cpuVsCpuTimer.start();
     }
+
 
     static int promptForBoardSize() {
         String result = JOptionPane.showInputDialog(null, "Enter board size (e.g., 8 for 8x8):", "New Game", JOptionPane.PLAIN_MESSAGE);
@@ -147,8 +152,6 @@ public class SOSGame {
         colorGroup.add(redButton);
         colorGroup.add(blueButton);
         redButton.setSelected(true);
-        redButton.addActionListener(e -> Board.setCurrentColor(Color.RED));
-        blueButton.addActionListener(e -> Board.setCurrentColor(Color.BLUE));
         colorPanel.add(redButton);
         colorPanel.add(blueButton);
 
@@ -160,15 +163,58 @@ public class SOSGame {
         letterGroup.add(sButton);
         letterGroup.add(oButton);
         sButton.setSelected(true); // By default, "S" will be selected
-        sButton.addActionListener(e -> Board.setCurrentLetter("S"));
-        oButton.addActionListener(e -> Board.setCurrentLetter("O"));
         letterPanel.add(sButton);
         letterPanel.add(oButton);
 
         panel.add(colorPanel);
         panel.add(letterPanel);
+
+        // Check if the selected opponent type is "CPU vs CPU"
+        if ("CPU vs CPU".equals(selectedOpponentType)) {
+            Timer letterTimer = new Timer(3000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    SwingUtilities.invokeLater(() -> {
+                        // Switch the selected radio button for letters
+                        if (sButton.isSelected()) {
+                            sButton.setSelected(false);
+                            oButton.setSelected(true);
+                            Board.setCurrentLetter("O");
+                        } else {
+                            sButton.setSelected(true);
+                            oButton.setSelected(false);
+                            Board.setCurrentLetter("S");
+                        }
+                    });
+                }
+            });
+
+            Timer colorTimer = new Timer(1000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    SwingUtilities.invokeLater(() -> {
+                        // Switch the selected radio button for colors
+                        if (redButton.isSelected()) {
+                            redButton.setSelected(false);
+                            blueButton.setSelected(true);
+                            Board.setCurrentColor(Color.BLUE);
+                        } else {
+                            redButton.setSelected(true);
+                            blueButton.setSelected(false);
+                            Board.setCurrentColor(Color.RED);
+                        }
+                    });
+                }
+            });
+
+            // Start the timers
+            letterTimer.start();
+            colorTimer.start();
+        }
+
         return panel;
     }
+
 
     static void initializeMenu(JFrame frame) {
         JMenuBar menuBar = new JMenuBar();
